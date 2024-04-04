@@ -8,8 +8,9 @@ import { sanitizePath } from "./utils/files";
 import { resolve } from "path";
 
 const ROOT_DIR = "test";
-const TMP_DIR = "tmp";
 const SAVE_DIR = "export/test";
+
+const TMP_DIR = "tmp";
 
 async function main() {
   let tmpName = await mkdtemp(TMP_DIR);
@@ -56,7 +57,7 @@ async function main() {
     console.log(`\u001b[32m Finished converting ${filePath}\u001b[0m\n`);
   }
 
-  console.log(`\n\n\u001b[32m Finished Converting all files[0m`);
+  console.log(`\n\n\u001b[32m Finished Converting all files\u001b[0m`);
 
   rm(tmpName, { recursive: true });
 }
