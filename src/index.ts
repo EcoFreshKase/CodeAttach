@@ -35,7 +35,6 @@ async function main() {
 
     // temporarily save html
     let htmlSavePath = `${tmpName}/${sanitizePath(filePath)}.html`;
-    console.log(htmlSavePath);
     writeFileSync(htmlSavePath, html);
 
     // html to pdf
