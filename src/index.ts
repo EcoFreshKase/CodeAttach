@@ -63,24 +63,3 @@ async function main() {
 }
 
 main();
-
-// const filePath = "src-index.ts";
-// const html = `
-// <body style="margin: 0px">
-//   <img src="test-react-app-env.d.ts.png" />
-// </body>
-// `;
-
-// generatePdf(
-//   { url: "D:\\Coding Projekte\\CodeAttach\\tmpclwV1d\\test-App.css.html" },
-//   // { content: html },
-//   {
-//     format: "A4",
-//     path: `export/${filePath}.pdf`,
-//     footerTemplate: createFooterTemplate(filePath),
-//     displayHeaderFooter: true,
-//     margin: {
-//       bottom: "60px",
-//     },
-//   }
-// );
