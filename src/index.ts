@@ -1,16 +1,19 @@
 import { generatePdf, generatePdfs } from "html-pdf-node";
 import { createFooterTemplate } from "./utils/exportFooter";
 import { mkdtemp, readdir, rm } from "fs/promises";
+import { writeFileSync } from "fs";
 import { convertToImage } from "./utils/fileConverter";
 import { embedInHtml } from "./utils/htmlParser";
 import { sanitizePath } from "./utils/files";
+import { resolve } from "path";
 
-const ROOT_DICT = "test";
-const TMP_DICT = "tmp";
+const ROOT_DIR = "test";
+const TMP_DIR = "tmp";
+const SAVE_DIR = "export/test";
 
 async function main() {
-  let tmpName = await mkdtemp(TMP_DICT);
-  let dirents = await readdir(ROOT_DICT, {
+  let tmpName = await mkdtemp(TMP_DIR);
+  let dirents = await readdir(ROOT_DIR, {
     withFileTypes: true,
     recursive: true,
   });
@@ -28,17 +31,21 @@ async function main() {
 
     // embed image in html
     console.log(`\u001b[33m Converting ${filePath} to html ...\u001b[0m`);
-    let html = embedInHtml(`${tmpName}/${savePath}`);
-    console.log(html);
+    let html = embedInHtml(`${savePath}`);
+
+    // temporarily save html
+    let htmlSavePath = `${tmpName}/${sanitizePath(filePath)}.html`;
+    console.log(htmlSavePath);
+    writeFileSync(htmlSavePath, html);
 
     // html to pdf
     console.log(`\u001b[33m Converting ${filePath} to pdf ...\u001b[0m`);
     let pdfSavePath = sanitizePath(filePath);
     await generatePdf(
-      { content: html },
+      { url: resolve(htmlSavePath) },
       {
         format: "A4",
-        path: `export/test/${pdfSavePath}.pdf`,
+        path: `${SAVE_DIR}/${pdfSavePath}.pdf`,
         footerTemplate: createFooterTemplate(filePath),
         displayHeaderFooter: true,
         margin: {
@@ -50,7 +57,7 @@ async function main() {
     console.log(`\u001b[32m Finished converting ${filePath}\u001b[0m\n`);
   }
 
-  console.log(await readdir(tmpName), { withFileTypes: true });
+  console.log(`\n\n\u001b[32m Finished Converting all files[0m`);
 
   rm(tmpName, { recursive: true });
 }
@@ -60,20 +67,13 @@ main();
 // const filePath = "src-index.ts";
 // const html = `
 // <body style="margin: 0px">
-//   <h1>Welcome to html-pdf-node</h1>
-//   <p>Hello World</p>
-//   <img
-//     src="D:\\Coding Projekte\\CodeAttach\\tmphdsbBY\\test-react-app-env.d.ts.png"
-//     alt="some Code"
-//   />
-//   <img src="export/1.png.png" alt="1.png.png" />
+//   <img src="test-react-app-env.d.ts.png" />
 // </body>
-
 // `;
 
 // generatePdf(
-//   // { url: "D:\\Coding Projekte\\CodeAttach\\export\\more.html" },
-//   { content: html },
+//   { url: "D:\\Coding Projekte\\CodeAttach\\tmpclwV1d\\test-App.css.html" },
+//   // { content: html },
 //   {
 //     format: "A4",
 //     path: `export/${filePath}.pdf`,
