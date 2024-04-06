@@ -1,15 +1,9 @@
-import { generatePdf, generatePdfs } from "html-pdf-node";
-import { createFooterTemplate } from "./utils/exportFooter";
 import { mkdtemp, readdir, rm } from "fs/promises";
-import { writeFileSync } from "fs";
-import { convertToImage } from "./utils/fileConverter";
-import { embedInHtml } from "./utils/htmlParser";
-import { sanitizePath } from "./utils/files";
-import { resolve } from "path";
+import { FileToPdfConverter } from "./Converter/FileToPdfConverter";
 
 const ROOT_DIR = "test";
 const SAVE_DIR = "export/test";
-
+const CARBON_CONFIG = "local-carbon-config.json";
 const TMP_DIR = "tmp";
 
 async function main() {
@@ -19,42 +13,19 @@ async function main() {
     recursive: true,
   });
 
+  let file2Pdf = new FileToPdfConverter(true);
+  await file2Pdf.prepare({
+    exportDir: SAVE_DIR,
+    carbonConfig: CARBON_CONFIG,
+    tmpDir: tmpName,
+  });
+
   // parse all files to pdf
   for (let dirent of dirents) {
     if (!dirent.isFile()) {
       continue;
     }
-    let filePath = `${dirent.path}\\${dirent.name}`;
-
-    // file to image
-    console.log(`\u001b[33m Converting ${filePath} to image ...\u001b[0m`);
-    let savePath = convertToImage(filePath, tmpName);
-
-    // embed image in html
-    console.log(`\u001b[33m Converting ${filePath} to html ...\u001b[0m`);
-    let html = embedInHtml(`${savePath}`);
-
-    // temporarily save html
-    let htmlSavePath = `${tmpName}/${sanitizePath(filePath)}.html`;
-    writeFileSync(htmlSavePath, html);
-
-    // html to pdf
-    console.log(`\u001b[33m Converting ${filePath} to pdf ...\u001b[0m`);
-    let pdfSavePath = sanitizePath(filePath);
-    await generatePdf(
-      { url: resolve(htmlSavePath) },
-      {
-        format: "A4",
-        path: `${SAVE_DIR}/${pdfSavePath}.pdf`,
-        footerTemplate: createFooterTemplate(filePath),
-        displayHeaderFooter: true,
-        margin: {
-          bottom: "60px",
-        },
-      }
-    );
-
-    console.log(`\u001b[32m Finished converting ${filePath}\u001b[0m\n`);
+    await file2Pdf.convert(dirent);
   }
 
   console.log(`\n\n\u001b[32m Finished Converting all files\u001b[0m`);

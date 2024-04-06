@@ -1,13 +1,14 @@
 {
   "scripts": {
-    "start": "tsc && node dist/index.js"
+    "start": "npx tsx src/index.ts"
   },
   "devDependencies": {
     "@types/html-pdf-node": "^1.0.2",
     "typescript": "^5.4.3"
   },
   "dependencies": {
+    "carbon-now-cli": "^2.0.0",
     "html-pdf-node": "^1.0.8",
-    "carbon-now-cli": "^2.0.0"
+    "nanoid": "^5.0.6"
   }
 }
