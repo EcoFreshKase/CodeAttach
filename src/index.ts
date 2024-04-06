@@ -5,6 +5,7 @@ const ROOT_DIR = "test";
 const SAVE_DIR = "export/test";
 const CARBON_CONFIG = "local-carbon-config.json";
 const TMP_DIR = "tmp";
+const INCLUDE_REGEX = new RegExp(/./);
 
 async function main() {
   let tmpName = await mkdtemp(TMP_DIR);
@@ -23,6 +24,10 @@ async function main() {
   // parse all files to pdf
   for (let dirent of dirents) {
     if (!dirent.isFile()) {
+      continue;
+    }
+    let fullPath = `${dirent.path}\\${dirent.name}`;
+    if (!fullPath.match(INCLUDE_REGEX)) {
       continue;
     }
     await file2Pdf.convert(dirent);
