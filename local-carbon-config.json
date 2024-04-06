@@ -16,7 +16,7 @@
     "fontSize": "15px",
     "lineHeight": "143%",
     "windowControls": false,
-    "widthAdjustment": true,
+    "widthAdjustment": false,
     "lineNumbers": false,
     "firstLineNumber": 1,
     "exportSize": "2x",
@@ -24,7 +24,7 @@
     "squaredImage": false,
     "hiddenCharacters": false,
     "name": "",
-    "width": "459",
+    "width": "400",
     "custom": {
       "background": "rgba(0, 0, 0, 0)",
       "text": "rgba(0, 0, 0, 100)",
