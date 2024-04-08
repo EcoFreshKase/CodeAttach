@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "start": "npx tsx src/index.ts"
+    "start": "npx tsx src/index.ts",
+    "cli:export": "npx tsx src/cli.ts export --config myConfig.json --include-regex \".*\\.(ts|js)\" src export",
+    "cli:export:help": "npx tsx src/cli.ts help export"
   },
   "devDependencies": {
     "@types/html-pdf-node": "^1.0.2",
@@ -8,6 +10,7 @@
   },
   "dependencies": {
     "carbon-now-cli": "^2.0.0",
+    "commander": "^12.0.0",
     "html-pdf-node": "^1.0.8",
     "nanoid": "^5.0.6"
   }
